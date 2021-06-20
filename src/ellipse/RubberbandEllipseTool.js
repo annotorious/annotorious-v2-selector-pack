@@ -1,11 +1,11 @@
 import Tool from '@recogito/annotorious/src/tools/Tool';
-import RubberbandCircle from './RubberbandCircle';
-import EditableCircle from './EditableCircle';
+import RubberbandEllipse from './RubberbandEllipse';
+import EditableEllipse from './EditableEllipse';
 
 /**
- * A rubberband selector for circle selections.
+ * A rubberband selector for ellipse selections.
  */
-export default class RubberbandCircleTool extends Tool {
+export default class RubberbandEllipseTool extends Tool {
 
   constructor(g, config, env) {
     super(g, config, env);
@@ -19,7 +19,7 @@ export default class RubberbandCircleTool extends Tool {
       mouseUp: this.onMouseUp
     });
 
-    this.rubberband = new RubberbandCircle(x, y, this.g, this.env);
+    this.rubberband = new RubberbandEllipse(x, y, this.g, this.env);
   }
 
   stop = () => {
@@ -60,14 +60,14 @@ export default class RubberbandCircleTool extends Tool {
   }
   
   createEditableShape = annotation =>
-    new EditableCircle(annotation, this.g, this.config, this.env);
+    new EditableEllipse(annotation, this.g, this.config, this.env);
 
 }
 
-RubberbandCircleTool.identifier = 'circle';
+RubberbandEllipseTool.identifier = 'ellipse';
 
-RubberbandCircleTool.supports = annotation => {
+RubberbandEllipseTool.supports = annotation => {
   const selector = annotation.selector('SvgSelector');
   if (selector)
-    return selector.value?.match(/^<svg.*<circle/g);
+    return selector.value?.match(/^<svg.*<ellipse/g);
 }

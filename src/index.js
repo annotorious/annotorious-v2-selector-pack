@@ -1,5 +1,5 @@
 import RubberbandCircleTool from './circle/RubberbandCircleTool';
-import RubberbandEllipseTool from './circle/RubberbandEllipseTool';
+import RubberbandEllipseTool from './ellipse/RubberbandEllipseTool';
 
 const SelectorPack = (anno, config) => {
 

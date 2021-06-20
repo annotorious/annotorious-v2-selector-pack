@@ -1,6 +1,6 @@
+import Tool from '@recogito/annotorious/src/tools/Tool';
 import RubberbandCircle from './RubberbandCircle';
 import EditableCircle from './EditableCircle';
-import Tool from '@recogito/annotorious/src/tools/Tool';
 
 /**
  * A rubberband selector for circle selections.

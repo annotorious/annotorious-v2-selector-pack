@@ -48,9 +48,22 @@ export default class RubberbandFreehandTool extends Tool {
 
     this.rubberband.addPoint([ x, y ]);
 
-    const shape = this.rubberband.element;
-    shape.annotation = this.rubberband.toSelection();
-    this.emit('complete', shape);
+    this.detachListeners();
+
+    const { width, height } = this.rubberband.getBoundingClientRect();
+
+    const minWidth = this.config.minSelectionWidth || 4;
+    const minHeight = this.config.minSelectionHeight || 4;
+
+    if (width >= minWidth || height >= minHeight) {
+
+      const shape = this.rubberband.element;
+      shape.annotation = this.rubberband.toSelection();
+
+      this.emit('complete', shape);
+    } else {
+      this.emit('cancel');
+    }
 
     this.stop();
   }

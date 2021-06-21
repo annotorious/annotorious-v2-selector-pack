@@ -111,13 +111,13 @@ export default class EditableFreehand extends EditableShape {
     const outer = this.shape.querySelector('.a9s-outer');
     outer.setAttribute('d', str);
 
+    const { x, y, width, height } = outer.getBBox();
+
     // TODO optional: mask to dim the outside area
     // this.mask.redraw();
 
     // TODO optional: handles to stretch the shape
 /*    const [ topleft, topright, bottomright, bottomleft] = this.handles;
-
-    const { x, y, width, height } = outer.getBBox();
 
     this.setHandleXY(topleft, x, y);
     this.setHandleXY(topright, x + width, y);

@@ -2,19 +2,19 @@ import EditableShape from '@recogito/annotorious/src/tools/EditableShape';
 import { drawEmbeddedSVG, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
 import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Formatting';
-//import { getFreehandSize, setFreehandSize } from './Freehand';
-//import Mask from './FreeDrawingMask';
+// TODO optional: mask to dim the outside area
+//import Mask from './FreehandMask';
 
 const getPoints = shape => {
   const pointList = shape.querySelector('.a9s-inner').getAttribute('d').split('L');
   const points = [];
   if(pointList.length > 0) {
     var point = pointList[0].substring(1).trim().split(' ');
-    points.push({ x: point[0], y: point[1] });
+    points.push({ x: parseFloat(point[0]), y: parseFloat(point[1]) });
 
     for (let i = 1; i < pointList.length; i++) {
       var point = pointList[i].trim().split(' ');
-      points.push({ x: point[0], y: point[1] });
+      points.push({ x: parseFloat(point[0]), y: parseFloat(point[1]) });
     }
   }
 
@@ -26,7 +26,7 @@ const getBBox = shape => {
 }
 
 /**
- * An editable free drawing.
+ * An editable freehand drawing.
  */
 export default class EditableFreehand extends EditableShape {
 
@@ -54,20 +54,28 @@ export default class EditableFreehand extends EditableShape {
     this.containerGroup = document.createElementNS(SVG_NAMESPACE, 'g');
 
     this.shape = drawEmbeddedSVG(annotation);
-    this.shape.querySelector('.a9s-inner')
-      .addEventListener('mousedown', this.onGrab(this.shape));
 
-//    this.mask = new Mask(env.image, this.shape.querySelector('.a9s-inner'));
+   // TODO optional: mask to dim the outside area
+   // this.mask = new Mask(env.image, this.shape.querySelector('.a9s-inner'));
     
-//    this.containerGroup.appendChild(this.mask.element);
+   // this.containerGroup.appendChild(this.mask.element);
 
     this.elementGroup = document.createElementNS(SVG_NAMESPACE, 'g');
     this.elementGroup.setAttribute('class', 'a9s-annotation editable selected');
     this.elementGroup.appendChild(this.shape);
 
+    this.containerGroup.appendChild(this.elementGroup);
+    g.appendChild(this.containerGroup);
+
+    format(this.shape, annotation, config.formatter);
+
+    this.shape.querySelector('.a9s-inner')
+      .addEventListener('mousedown', this.onGrab(this.shape));
+
     const { x, y, width, height } = getBBox(this.shape);
 
-    this.handles = [
+    // TODO optional: handles to stretch the shape
+/*    this.handles = [
       [ x, y ], 
       [ x + width, y ], 
       [ x + width, y + height ], 
@@ -80,12 +88,7 @@ export default class EditableFreehand extends EditableShape {
       this.elementGroup.appendChild(handle);
 
       return handle;
-    });
-
-    this.containerGroup.appendChild(this.elementGroup);
-    g.appendChild(this.containerGroup);
-
-    format(this.shape, annotation, config.formatter);
+    });*/
 
     // The grabbed element (handle or entire shape), if any
     this.grabbedElem = null;
@@ -108,45 +111,31 @@ export default class EditableFreehand extends EditableShape {
     const outer = this.shape.querySelector('.a9s-outer');
     outer.setAttribute('d', str);
 
-//    this.mask.redraw();
+    // TODO optional: mask to dim the outside area
+    // this.mask.redraw();
+
+    // TODO optional: handles to stretch the shape
+/*    const [ topleft, topright, bottomright, bottomleft] = this.handles;
 
     const { x, y, width, height } = outer.getBBox();
+
+    this.setHandleXY(topleft, x, y);
+    this.setHandleXY(topright, x + width, y);
+    this.setHandleXY(bottomright, x + width, y + height);
+    this.setHandleXY(bottomleft, x, y + height);*/
+
     setFormatterElSize(this.elementGroup, x, y, width, height);
   }
 
-  stretchCorners = (draggedHandleIdx, anchorHandle, mousePos) => {
-    //TODO implement
-/*    const anchor = this.getHandleXY(anchorHandle);
-
-    const width = mousePos.x - anchor.x;
-    const height = mousePos.y - anchor.y;
-
-    const x = width > 0 ? anchor.x : mousePos.x;
-    const y = height > 0 ? anchor.y : mousePos.y;
-    const w = Math.abs(width);
-    const h = Math.abs(height);
-
-    setRectSize(this.rectangle, x, y, w, h);
-    setRectMaskSize(this.mask, this.env.image, x, y, w, h);
-    setFormatterElSize(this.elementGroup, x, y, w, h);
-
-    // Anchor (=opposite handle) stays in place, dragged handle moves with mouse
-    this.setHandleXY(this.handles[draggedHandleIdx], mousePos.x, mousePos.y);
-
-    // Handles left and right of the dragged handle
-    const left = this.handles[(draggedHandleIdx + 3) % 4];
-    this.setHandleXY(left, anchor.x, mousePos.y);
-
-    const right = this.handles[(draggedHandleIdx + 5) % 4];
-    this.setHandleXY(right, mousePos.x, anchor.y);*/
-
-  }
+    // TODO optional: handles to stretch the shape
+/*  stretchCorners = (draggedHandleIdx, anchorHandle, mousePos) => {
+    const anchor = this.getHandleXY(anchorHandle);
+  }*/
 
   onGrab = grabbedElem => evt => {
     this.grabbedElem = grabbedElem;
     const pos = this.getSVGPoint(evt);
-    const { x, y, w, h } = getBBox(this.shape);
-    this.grabbedAt = { x: pos.x - x, y: pos.y - y };
+    this.grabbedAt = { x: pos.x, y: pos.y };
   }
 
   onMouseMove = evt => {
@@ -170,9 +159,11 @@ export default class EditableFreehand extends EditableShape {
         this.grabbedAt = pos;
 
         this.setPoints(updatedPoints);
-        
+
         this.emit('update', toSVGTarget(this.shape, this.env.image));
-      } else {
+      }
+      // TODO optional: handles to stretch the shape
+      /* else {
         const handleIdx = this.handles.indexOf(this.grabbedElem);
         const oppositeHandle = handleIdx < 2 ? 
           this.handles[handleIdx + 2] : this.handles[handleIdx - 2];
@@ -180,7 +171,7 @@ export default class EditableFreehand extends EditableShape {
         this.stretchCorners(handleIdx, oppositeHandle, pos);
 
         this.emit('update', toSVGTarget(this.shape, this.env.image));
-      }
+      }*/
     }
   }
 

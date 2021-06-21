@@ -40,17 +40,7 @@ export default class RubberbandFreehandTool extends Tool {
     this.rubberband.dragTo([ x, y ]);
 
   onMouseUp = (x, y) => {
-    const { width, height } = this.rubberband.getBoundingClientRect();
-
-//    const minWidth = this.config.minSelectionWidth || 4;
-//    const minHeight = this.config.minSelectionHeight || 4;
-    
-//    if (width >= minWidth || height >= minHeight) {
-      this.rubberband.addPoint([ x, y ]);
-//    } else {
-//      this.emit('cancel');
-//      this.stop();
-//    }
+    this.onDblClick(x, y);
   }
 
   onDblClick = (x, y) => {

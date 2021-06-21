@@ -1,8 +1,8 @@
 import { Selection } from '@recogito/annotorious/src/tools/Tool';
 import { toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
-//import { drawEllipse, setEllipseSize } from './Freehand';
-//import Mask from './EllipseMask';
+// TODO optional: mask to dim the outside area
+//import Mask from './FreehandMask';
 
 /**
  * A 'rubberband' selection tool for creating freehand drawing by
@@ -28,7 +28,8 @@ export default class RubberbandFreehand {
 
     this.setPoints(this.points);
 
-//    this.mask = new Mask(env.image, this.inner);
+   // TODO optional: mask to dim the outside area
+   // this.mask = new Mask(env.image, this.inner);
 
     this.freehand.appendChild(this.outer);
     this.freehand.appendChild(this.inner);
@@ -37,7 +38,8 @@ export default class RubberbandFreehand {
     // the user actually moves the mouse
     this.group.style.display = 'none';
 
-//    this.group.appendChild(this.mask.element);
+   // TODO optional: mask to dim the outside area
+   // this.group.appendChild(this.mask.element);
     this.group.appendChild(this.freehand);
 
     g.appendChild(this.group);
@@ -57,16 +59,19 @@ export default class RubberbandFreehand {
     // Make visible
     this.group.style.display = null;
 
-    const rubberband = [ ...this.points, xy ];
+    //TODO optional: edge smoothing
 
-    this.setPoints(rubberband);
-//    this.mask.redraw();
+    this.addPoint(xy);
+
+   // TODO optional: mask to dim the outside area
+   // this.mask.redraw();
   }
 
   addPoint = xy => {
     this.points = [ ...this.points, xy ];
     this.setPoints(this.points);   
-//    this.mask.redraw();
+   // TODO optional: mask to dim the outside area
+   // this.mask.redraw();
   }
 
   get element() {

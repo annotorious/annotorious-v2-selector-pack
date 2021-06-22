@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Additional selection tools for Annotorious and the Annotorious OpenSeadragon plugin",
   "main": "src/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "webpack-dev-server --open --mode=development -d",
     "build": "webpack --mode=production"
@@ -33,6 +36,6 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@recogito/annotorious": "^2.4.1"
+    "@recogito/annotorious": "^2.4.4"
   }
 }

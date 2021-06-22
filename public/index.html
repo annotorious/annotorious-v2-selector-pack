@@ -2,21 +2,40 @@
 <html>
   <head>
     <title>Annotorious | Selector Pack</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@recogito/annotorious@2.4.2/dist/annotorious.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious@2.4.2/dist/annotorious.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@recogito/annotorious@2.4.4/dist/annotorious.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious@2.4.4/dist/annotorious.min.js"></script>
   </head>
   <body>
+    <p>
+      <button id="current-tool">RECT</button>
+    </p>
     <img id="hallstatt" src="640px-Hallstatt.jpg">
     <script src="annotorious-selector-pack.min.js"></script>
     <script>
       window.onload = function() {
         var anno = Annotorious.init({
-          image: 'hallstatt'
+          image: 'hallstatt',
+          allowEmpty: true
         });
 
         Annotorious.SelectorPack(anno, {});
 
-        anno.setDrawingTool('ellipse');
+        var tools = anno.listDrawingTools();
+        var selected = 0;
+
+        var toolToggle = document.getElementById('current-tool');
+        toolToggle.addEventListener('click', function() {
+          selected += 1;
+          selected = selected % tools.length;
+
+          var tool = tools[selected];
+          toolToggle.innerHTML = tool.toUpperCase();
+          anno.setDrawingTool(tool);
+        });
+
+        anno.on('createAnnotation', function(a) {
+          console.log(a);
+        });
       }
     </script>
   </body>

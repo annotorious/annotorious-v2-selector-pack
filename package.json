@@ -2,10 +2,7 @@
   "name": "@recogito/annotorious-selector-pack",
   "version": "0.1.1",
   "description": "Additional selection tools for Annotorious and the Annotorious OpenSeadragon plugin",
-  "main": "src/index.js",
-  "files": [
-    "dist"
-  ],
+  "main": "dist/annotorious.min.js",
   "scripts": {
     "start": "webpack-dev-server --open --mode=development -d",
     "build": "webpack --mode=production"

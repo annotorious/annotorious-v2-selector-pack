@@ -4,7 +4,7 @@
   "description": "Additional selection tools for Annotorious and the Annotorious OpenSeadragon plugin",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack-dev-server --open --mode=development -d",
+    "start": "webpack serve --open --mode=development",
     "build": "webpack --mode=production"
   },
   "repository": {

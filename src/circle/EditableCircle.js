@@ -162,8 +162,8 @@ export default class EditableCircle extends EditableShape {
 
         const { naturalWidth, naturalHeight } = this.env.image;
 
-        const cx = constrain(pos.x - this.grabbedAt.x, naturalWidth - r);
-        const cy = constrain(pos.y - this.grabbedAt.y, naturalHeight - r);
+        const cx = Math.max(constrain(pos.x - this.grabbedAt.x, naturalWidth - r), r);
+        const cy = Math.max(constrain(pos.y - this.grabbedAt.y, naturalHeight - r), r);
 
         this.setSize(cx, cy, r); 
         this.emit('update', toSVGTarget(this.circle, this.env.image)); 

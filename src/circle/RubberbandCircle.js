@@ -42,17 +42,20 @@ export default class RubberbandCircle {
   }
 
   dragTo = (oppositeX, oppositeY) => {
+    const { naturalWidth, naturalHeight } = this.env.image;
+
     // Make visible
     this.group.style.display = null;
 
     const w = oppositeX - this.anchor[0];
     const h = oppositeY - this.anchor[1];
+    const r = Math.max(1, Math.pow(w ** 2 + h ** 2, 0.5) / 2);
 
-    const cx = w > 0 ? this.anchor[0] + w / 2 : oppositeX + w / 2;
-    const cy = h > 0 ? this.anchor[1] + h / 2 : oppositeY + h / 2;
+    const cx = this.anchor[0] + w / 2;
+    const cy = this.anchor[1] + h / 2;
 
-    const r = Math.max(1, Math.pow(w ** 2 + h ** 2, 0.5) / 2); // Negative values
-
+    if ((cx-r < 0 || cx + r > naturalWidth) || (cy-r < 0 || cy + r > naturalHeight)) return;
+    
     setCircleSize(this.circle, cx, cy, r);
     this.mask.redraw();
   }

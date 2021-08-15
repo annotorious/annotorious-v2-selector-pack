@@ -1,5 +1,5 @@
 import EditableShape from '@recogito/annotorious/src/tools/EditableShape';
-import { drawEmbeddedSVG, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
+import { drawEmbeddedSVG, svgFragmentToShape, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
 import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Formatting';
 // TODO optional: mask to dim the outside area
@@ -182,6 +182,11 @@ export default class EditableFreehand extends EditableShape {
 
   get element() {
     return this.elementGroup;
+  }
+
+  updateState = annotation => {
+    const points = getPoints(svgFragmentToShape(annotation));
+    this.setPoints(points);
   }
 
   destroy = () => {

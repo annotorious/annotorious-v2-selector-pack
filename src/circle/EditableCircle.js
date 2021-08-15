@@ -1,5 +1,5 @@
 import EditableShape from '@recogito/annotorious/src/tools/EditableShape';
-import { drawEmbeddedSVG, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
+import { drawEmbeddedSVG, svgFragmentToShape, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
 import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Formatting';
 import { getCircleSize, setCircleSize } from './Circle';
@@ -187,6 +187,16 @@ export default class EditableCircle extends EditableShape {
 
   get element() { 
     return this.elementGroup; 
+  }
+
+  updateState = annotation => {
+    const shape = svgFragmentToShape(annotation);
+
+    const cx = shape.getAttribute('cx');
+    const cy = shape.getAttribute('cy');
+    const r = shape.getAttribute('r');
+    
+    this.setSize(cx, cy, r);
   }
 
   destroy() {

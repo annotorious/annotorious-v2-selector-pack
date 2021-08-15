@@ -1,5 +1,5 @@
 import EditableShape from '@recogito/annotorious/src/tools/EditableShape';
-import { drawEmbeddedSVG, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
+import { drawEmbeddedSVG, svgFragmentToShape, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
 import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Formatting';
 import { getEllipseSize, setEllipseSize } from './Ellipse';

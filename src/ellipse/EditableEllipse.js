@@ -197,10 +197,10 @@ export default class EditableEllipse extends EditableShape {
   updateState = annotation => {
     const shape = svgFragmentToShape(annotation);
 
-    const cx = shape.getAttribute('cx');
-    const cy = shape.getAttribute('cy');
-    const rx = shape.getAttribute('rx');
-    const ry = shape.getAttribute('ry');
+    const cx = parseFloat(shape.getAttribute('cx'));
+    const cy = parseFloat(shape.getAttribute('cy'));
+    const rx = parseFloat(shape.getAttribute('rx'));
+    const ry = parseFloat(shape.getAttribute('ry'));
     
     this.setSize(cx, cy, rx, ry);
   }

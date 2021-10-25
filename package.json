@@ -1,6 +1,6 @@
 {
   "name": "@recogito/annotorious-selector-pack",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Additional selection tools for Annotorious and the Annotorious OpenSeadragon plugin",
   "main": "src/index.js",
   "scripts": {

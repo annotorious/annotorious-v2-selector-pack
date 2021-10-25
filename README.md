@@ -43,6 +43,17 @@ Include the plugin in your page directl from the CDN:
 </html>
 ```
 
+### If you only want to include some tools
+
+You can set the tools to include when initializing the plugin.
+
+```js
+// Will only include ellipse and freehand, but not circle
+Annotorious.SelectorPack(anno, { 
+  tools: ['ellipse', 'freehand']
+});
+```
+
 ## Development
 
 To run in development mode:

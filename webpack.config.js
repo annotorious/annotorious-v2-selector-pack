@@ -10,7 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: resolveAppPath('src'),
   output: {
-    filename: 'annotorious-selector-pack.min.js',
+    filename: 'annotorious-selector-pack.js',
     library: ['Annotorious', 'SelectorPack'],
     libraryTarget: 'umd',
     libraryExport: 'default',

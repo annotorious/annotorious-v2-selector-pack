@@ -1,10 +1,7 @@
 import Tool, { Selection } from '@recogito/annotorious/src/tools/Tool';
-import { toRectFragment } from '@recogito/annotorious/src/selectors/RectFragment';
 import EditablePoint from './EditablePoint';
+import { toFragment, isPoint } from './Point';
 
-const isPoint = annotation =>
-  annotation.target.renderedVia?.name === 'point';
-  
 export default class PointTool extends Tool {
 
   constructor(g, config, env) {
@@ -24,14 +21,7 @@ export default class PointTool extends Tool {
 
       this.g.appendChild(element);
 
-      const target = {
-        ...toRectFragment(x, y, 0, 0, this.env.image, this.config.fragmentUnit),
-        renderedVia: {
-          name: 'point'
-        }
-      };
-
-      element.annotation = new Selection(target);
+      element.annotation = new Selection(toFragment(x, y, this.env.image, this.config.fragmentUnit));
 
       this.emit('complete', element);
     } else {

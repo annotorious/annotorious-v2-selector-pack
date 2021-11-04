@@ -6,6 +6,11 @@ Additional selection tools for Annotorious and the Annotorious OpenSeadragon plu
 - Ellipse
 - Freehand
 
+## Compatibility
+
+__Please use Selector Pack v0.3.2 for Annotorious versions 2.5.8 and lower. An updated release, compatible with
+Annotorious 2.5.9+ is under development.__
+
 ## Using
 
 Include the plugin in your page directl from the CDN:

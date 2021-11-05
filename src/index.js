@@ -1,11 +1,13 @@
 import RubberbandCircleTool from './circle/RubberbandCircleTool';
 import RubberbandEllipseTool from './ellipse/RubberbandEllipseTool';
 import RubberbandFreehandTool from './freehand/RubberbandFreehandTool';
+import RubberbandMultipolygonTool from './multipolygon/RubberbandMultipolygonTool';
 
 const ALL_TOOLS = new Set([
   'circle',
   'ellipse',
-  'freehand'
+  'freehand',
+  'multipolygon'
 ]);
 
 const SelectorPack = (anno, config) => {
@@ -22,7 +24,10 @@ const SelectorPack = (anno, config) => {
   
   if (useTools.has('freehand'))
     anno.addDrawingTool(RubberbandFreehandTool);
-  
+
+  if (useTools.has('multipolygon'))
+    anno.addDrawingTool(RubberbandMultipolygonTool);
+
 }
 
 export default SelectorPack;

@@ -185,6 +185,9 @@ export default class EditableCircle extends EditableShape {
     this.grabbedAt = null;
   }
 
+  onScaleChanged = scale =>
+    this.handles.map(this.scaleHandle);
+
   get element() { 
     return this.elementGroup; 
   }

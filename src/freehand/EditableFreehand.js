@@ -173,6 +173,30 @@ export default class EditableFreehand extends EditableShape {
 
         this.emit('update', toSVGTarget(this.shape, this.env.image));
       }*/
+      else {
+        const { naturalWidth, naturalHeight } = this.env.image;
+        const dx = constrain(x, pos.x - this.grabbedAt.x, naturalWidth - width);
+        const dy = constrain(y, pos.y - this.grabbedAt.y, naturalHeight - height);
+
+        const handleIdx = this.handles.indexOf(this.grabbedElem);
+        let updatedPoints = [];
+        getPoints(this.shape).forEach((pt, idx) => {
+          if (idx === handleIdx) {
+            updatedPoints.push(pos);
+          } else if (idx + 1 === handleIdx || idx - 1 === handleIdx) {
+            let f = 0.5;
+            this.setHandleXY(this.handles[idx], pt.x + f * dx, pt.y + f * dy);
+            updatedPoints.push({ x: pt.x + f * dx, y: pt.y + f * dy }); //{ x: pt.x + 0.5*dx, y: pt.y + 0.5*dy };
+          } else {
+            updatedPoints.push(pt);
+          }
+        });
+        
+        this.grabbedAt = pos;
+        this.setPoints(updatedPoints);
+        this.setHandleXY(this.handles[handleIdx], pos.x, pos.y);
+        this.emit('update', toSVGTarget(this.shape, this.env.image));
+      }
     }
   }
 

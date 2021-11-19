@@ -6,7 +6,7 @@ import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Forma
 //import Mask from './FreehandMask';
 
 const getPoints = shape => {
-  const pointList = shape.getAttribute('d').split('L');
+  const pointList = shape.querySelector('.a9s-inner').getAttribute('d').split('L');
   const points = [];
   if(pointList.length > 0) {
     var point = pointList[0].substring(1).trim().split(' ');
@@ -88,7 +88,15 @@ export default class EditableFreehand extends EditableShape {
       this.elementGroup.appendChild(handle);
 
       return handle;
-    });*/
+      });*/
+      this.handles = getPoints(this.shape).map((pt,idx) => {
+	  const handle = this.drawHandle(pt.x, pt.y);
+	  console.log(handle.firstChild.firstChild.r);
+	  handle.addEventListener('mousedown', this.onGrab(handle));
+	  this.elementGroup.appendChild(handle);
+	  return handle;
+    });      
+      
 
     // The grabbed element (handle or entire shape), if any
     this.grabbedElem = null;

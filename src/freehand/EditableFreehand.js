@@ -6,15 +6,16 @@ import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Forma
 //import Mask from './FreehandMask';
 
 const getPoints = shape => {
-  const pointList = shape.getAttribute('d').split('L');
+  const pointList = shape.querySelector('.a9s-inner').getAttribute('d').split('L');
   const points = [];
+
   if(pointList.length > 0) {
     var point = pointList[0].substring(1).trim().split(' ');
     points.push({ x: parseFloat(point[0]), y: parseFloat(point[1]) });
 
     for (let i = 1; i < pointList.length; i++) {
-      var point = pointList[i].trim().split(' ');
-      points.push({ x: parseFloat(point[0]), y: parseFloat(point[1]) });
+	var point = pointList[i].trim().split(' ');
+	points.push({ x: parseFloat(point[0]), y: parseFloat(point[1]) });
     }
   }
 
@@ -88,7 +89,15 @@ export default class EditableFreehand extends EditableShape {
       this.elementGroup.appendChild(handle);
 
       return handle;
-    });*/
+      });*/
+      this.handles = getPoints(this.shape).map((pt,idx) => {
+	  const handle = this.drawHandle(pt.x, pt.y);
+	  console.log(handle.firstChild.firstChild.r);
+	  handle.addEventListener('mousedown', this.onGrab(handle));
+	  this.elementGroup.appendChild(handle);
+	  return handle;
+    });      
+      
 
     // The grabbed element (handle or entire shape), if any
     this.grabbedElem = null;
@@ -110,6 +119,8 @@ export default class EditableFreehand extends EditableShape {
 
     const outer = this.shape.querySelector('.a9s-outer');
     outer.setAttribute('d', str);
+
+    console.log(str);
 
     const { x, y, width, height } = outer.getBBox();
 
@@ -172,31 +183,36 @@ export default class EditableFreehand extends EditableShape {
         this.stretchCorners(handleIdx, oppositeHandle, pos);
 
         this.emit('update', toSVGTarget(this.shape, this.env.image));
-      }*/
-      else {
-        const { naturalWidth, naturalHeight } = this.env.image;
-        const dx = constrain(x, pos.x - this.grabbedAt.x, naturalWidth - width);
-        const dy = constrain(y, pos.y - this.grabbedAt.y, naturalHeight - height);
+	}*/
+	else {
+            console.log('=== ELSE MEETING === ');
 
-        const handleIdx = this.handles.indexOf(this.grabbedElem);
-        let updatedPoints = [];
-        getPoints(this.shape).forEach((pt, idx) => {
-          if (idx === handleIdx) {
-            updatedPoints.push(pos);
-          } else if (idx + 1 === handleIdx || idx - 1 === handleIdx) {
-            let f = 0.5;
-            this.setHandleXY(this.handles[idx], pt.x + f * dx, pt.y + f * dy);
-            updatedPoints.push({ x: pt.x + f * dx, y: pt.y + f * dy }); //{ x: pt.x + 0.5*dx, y: pt.y + 0.5*dy };
-          } else {
-            updatedPoints.push(pt);
-          }
-        });
-        
-        this.grabbedAt = pos;
-        this.setPoints(updatedPoints);
-        this.setHandleXY(this.handles[handleIdx], pos.x, pos.y);
-        this.emit('update', toSVGTarget(this.shape, this.env.image));
-      }
+
+            const { naturalWidth, naturalHeight } = this.env.image;
+            const dx = constrain(x, pos.x - this.grabbedAt.x, naturalWidth - width);
+            const dy = constrain(y, pos.y - this.grabbedAt.y, naturalHeight - height);
+	    
+            const handleIdx = this.handles.indexOf(this.grabbedElem);
+	    let updatedPoints = [];
+            getPoints(this.shape).forEach((pt, idx) => {
+		if (idx === handleIdx) {
+		    updatedPoints.push(pos);
+		} else if (idx + 1 === handleIdx || idx - 1 === handleIdx) {
+		    //pt.x += 0.2*dx;
+		    //pt.y += 0.2*dy;
+		    let f = 0.5;
+		    this.setHandleXY(this.handles[idx], pt.x + f*dx, pt.y + f*dy);		    
+		    updatedPoints.push({x:pt.x + f*dx, y:pt.y + f*dy}); //{ x: pt.x + 0.5*dx, y: pt.y + 0.5*dy };
+		} else {
+		    updatedPoints.push(pt);
+		}
+	    }); 
+	    // const updatedPoints = getPoints(this.shape).map((pt, idx) => (idx === handleIdx) ? pos : pt);
+            this.grabbedAt = pos;
+            this.setPoints(updatedPoints);
+            this.setHandleXY(this.handles[handleIdx], pos.x, pos.y);
+            this.emit('update', toSVGTarget(this.shape, this.env.image));
+      }	
     }
   }
 

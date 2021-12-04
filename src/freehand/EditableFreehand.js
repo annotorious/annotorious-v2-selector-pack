@@ -5,6 +5,7 @@ import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Forma
 // TODO optional: mask to dim the outside area
 //import Mask from './FreehandMask';
 
+
 const getPoints = shape => {
   const pointList = shape.querySelector('.a9s-inner').getAttribute('d').split('L');
   const points = [];
@@ -158,19 +159,26 @@ export default class EditableFreehand extends EditableShape {
 
       const { x, y, width, height } = getBBox(this.shape);
 
-      if (this.grabbedElem === this.shape) {
+	if (this.grabbedElem === this.shape) {
+
+        console.log('=== grabbed a shape === ');	    
 
         const { naturalWidth, naturalHeight } = this.env.image;
 
         const dx = constrain(x, pos.x - this.grabbedAt.x, naturalWidth - width);
         const dy = constrain(y, pos.y - this.grabbedAt.y, naturalHeight - height);
 
-        const inner = this.shape.querySelector('.a9s-inner');
-        const updatedPoints = getPoints(inner).map(pt => ({ x: pt.x + dx, y: pt.y + dy }));
+        // const inner = this.shape.querySelector('.a9s-inner');
+        const updatedPoints = getPoints(this.shape).map(pt => ({ x: pt.x + dx, y: pt.y + dy })); 
 
         this.grabbedAt = pos;
 
         this.setPoints(updatedPoints);
+
+	// Update the handle positions
+        getPoints(this.shape).forEach((pt, idx) => {
+            this.setHandleXY(this.handles[idx], pt.x + dx, pt.y + dy);
+	});
 
         this.emit('update', toSVGTarget(this.shape, this.env.image));
       }
@@ -185,7 +193,7 @@ export default class EditableFreehand extends EditableShape {
         this.emit('update', toSVGTarget(this.shape, this.env.image));
 	}*/
 	else {
-            console.log('=== ELSE MEETING === ');
+            console.log('=== grabbed a handle === ');
 
 
             const { naturalWidth, naturalHeight } = this.env.image;
@@ -193,7 +201,7 @@ export default class EditableFreehand extends EditableShape {
             const dy = constrain(y, pos.y - this.grabbedAt.y, naturalHeight - height);
 	    
             const handleIdx = this.handles.indexOf(this.grabbedElem);
-	    let updatedPoints = [];
+	    /*let updatedPoints = [];
             getPoints(this.shape).forEach((pt, idx) => {
 		if (idx === handleIdx) {
 		    updatedPoints.push(pos);
@@ -206,8 +214,8 @@ export default class EditableFreehand extends EditableShape {
 		} else {
 		    updatedPoints.push(pt);
 		}
-	    }); 
-	    // const updatedPoints = getPoints(this.shape).map((pt, idx) => (idx === handleIdx) ? pos : pt);
+	    });*/ 
+	    const updatedPoints = getPoints(this.shape).map((pt, idx) => (idx === handleIdx) ? pos : pt);
             this.grabbedAt = pos;
             this.setPoints(updatedPoints);
             this.setHandleXY(this.handles[handleIdx], pos.x, pos.y);

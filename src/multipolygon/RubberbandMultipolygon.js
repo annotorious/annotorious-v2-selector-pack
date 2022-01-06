@@ -1,7 +1,7 @@
 import { Selection } from '@recogito/annotorious/src/tools/Tool';
 import { toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
-import Mask from './PolygonMask';
+//import Mask from './MultipolygonMask';
 // TODO optional: mask to dim the outside area
 //import Mask from './multipolygonMask';
 
@@ -12,7 +12,7 @@ import Mask from './PolygonMask';
 export default class RubberbandMultipolygon {
 
   constructor(anchor, g, env) {
-    this.points =  [];
+    this.points = [];
     this.points.push([ anchor, anchor ])
 
     this.env = env;
@@ -29,7 +29,7 @@ export default class RubberbandMultipolygon {
     this.inner.setAttribute('class', 'a9s-inner');
 
     this.setPoints(this.points);
-    this.mask = new Mask(env.image, this.inner);
+    //this.mask = new Mask(env.image, this.inner);
 
    // TODO optional: mask to dim the outside area
    // this.mask = new Mask(env.image, this.inner);
@@ -43,7 +43,7 @@ export default class RubberbandMultipolygon {
 
     // TODO optional: mask to dim the outside area
     // this.group.appendChild(this.mask.element);
-    this.group.appendChild(this.mask.element);
+    //this.group.appendChild(this.mask.element);
     this.group.appendChild(this.multipolygon);
 
     g.appendChild(this.group);
@@ -83,7 +83,7 @@ export default class RubberbandMultipolygon {
       const rubberband = [ ...head, xy, head[0] ];
       headRest.push(rubberband)
       this.setPoints(headRest);
-      this.mask.redraw();
+      //this.mask.redraw();
     }
   
   addPoint = xy => {
@@ -96,7 +96,7 @@ export default class RubberbandMultipolygon {
       if (dist > 4) {
         this.points[this.points.length - 1] = [ ...head, xy, head[0] ];
         this.setPoints(this.points);   
-        this.mask.redraw();
+        //this.mask.redraw();
       } 
     } else{
       this.points[this.points.length - 1] = [xy,xy];

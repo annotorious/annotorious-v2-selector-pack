@@ -6,6 +6,7 @@ Additional selection tools for Annotorious and the Annotorious OpenSeadragon plu
 - Circle
 - Ellipse
 - Freehand
+- Multi-polygon
 
 ## Using
 

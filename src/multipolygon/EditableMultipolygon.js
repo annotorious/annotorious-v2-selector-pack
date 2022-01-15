@@ -231,7 +231,10 @@ export default class EditableMultipolygon extends EditableShape {
         this.setPoints(updatedPoints);
         let i = 0
         for (let updatedPointsList of updatedPoints){
-            updatedPointsList.forEach((pt, idx) => this.setHandleXY(this.handles[i][idx], pt.x, pt.y));
+            updatedPointsList.forEach((pt, idx) => { 
+              if (this.handles[i][idx] !== undefined)
+                this.setHandleXY(this.handles[i][idx], pt.x, pt.y)
+            });
             i+=1
         }
         

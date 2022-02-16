@@ -28,10 +28,10 @@ const SelectorPack = (anno, config) => {
     if (tool === 'ellipse')
       anno.addDrawingTool(RubberbandEllipseTool);
   
-    if (tools === 'freehand')
+    if (tool === 'freehand')
       anno.addDrawingTool(RubberbandFreehandTool);
 
-    if (tools === 'multipolygon')
+    if (tool === 'multipolygon')
       anno.addDrawingTool(RubberbandMultipolygonTool);
   });
 

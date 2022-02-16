@@ -82,5 +82,5 @@ RubberbandFreehandTool.identifier = 'freehand';
 RubberbandFreehandTool.supports = annotation => {
   const selector = annotation.selector('SvgSelector');
   if (selector)
-    return (selector.value?.match(/^<svg.*<path*/g) && !selector.value.toUpperCase().includes("Z"));
+    return (selector.value.match(/^<svg.*<path*/g) && !selector.value.toUpperCase().includes('Z'));
 }

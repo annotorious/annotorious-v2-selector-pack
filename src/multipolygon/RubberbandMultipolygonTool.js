@@ -111,8 +111,4 @@ export default class RubberbandMultipolygonTool extends Tool {
 
 RubberbandMultipolygonTool.identifier = 'multipolygon';
 
-RubberbandMultipolygonTool.supports = annotation => {
-  const selector = annotation.selector('SvgSelector');
-  if (selector)
-    return selector.value?.match(/^<svg.*<path d=/g);
-}
+RubberbandMultipolygonTool.supports = annotation => false;

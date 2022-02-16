@@ -2,6 +2,7 @@ import { Selection } from '@recogito/annotorious/src/tools/Tool';
 import { toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
 import Mask from '@recogito/annotorious/src/tools/polygon/PolygonMask';
+
 // TODO optional: mask to dim the outside area
 //import Mask from './multipolygonMask';
 
@@ -31,8 +32,8 @@ export default class RubberbandMultipolygon {
     this.setPoints(this.points);
     this.mask = new Mask(env.image, this.inner);
 
-   // TODO optional: mask to dim the outside area
-   // this.mask = new Mask(env.image, this.inner);
+    // TODO optional: mask to dim the outside area
+    // this.mask = new Mask(env.image, this.inner);
 
     this.multipolygon.appendChild(this.outer);
     this.multipolygon.appendChild(this.inner);
@@ -51,6 +52,7 @@ export default class RubberbandMultipolygon {
 
   setPoints = points => {
     var attr ="";
+
     for (var ps of points){
       var attr2=""
       if (ps.length>0){
@@ -67,7 +69,9 @@ export default class RubberbandMultipolygon {
          attr+=attr2
       }
     }
+
     attr+=" Z"
+    
     this.outer.setAttribute('d', attr);
     this.inner.setAttribute('d', attr);
   }
@@ -75,20 +79,19 @@ export default class RubberbandMultipolygon {
   getBoundingClientRect = () =>
     this.outer.getBoundingClientRect();
 
-    dragTo = xy => {
-      // Make visible
-      this.group.style.display = null;
-      const head = this.points[this.points.length - 1].slice(0, this.points[this.points.length - 1].length - 1);
-      var headRest=this.points.slice(0,-1)
-      const rubberband = [ ...head, xy, head[0] ];
-      headRest.push(rubberband)
-      this.setPoints(headRest);
-      this.mask.redraw();
-    }
+  dragTo = xy => {
+    // Make visible
+    this.group.style.display = null;
+    const head = this.points[this.points.length - 1].slice(0, this.points[this.points.length - 1].length - 1);
+    var headRest=this.points.slice(0,-1)
+    const rubberband = [ ...head, xy, head[0] ];
+    headRest.push(rubberband)
+    this.setPoints(headRest);
+    this.mask.redraw();
+  }
   
   addPoint = xy => {
     // Don't add a new point if distance < 2 pixels
-    // console.log("Entering addpoint", this.points[this.points.length - 1].length);
     if (this.points[this.points.length - 1].length>0){
       const head = this.points[this.points.length - 1].slice(0, this.points[this.points.length - 1].length - 1);
       const lastCorner = head[head.length - 1];
@@ -100,12 +103,11 @@ export default class RubberbandMultipolygon {
       } 
     } else{
       this.points[this.points.length - 1] = [xy,xy];
-      // console.log(this.points[this.points.length - 1]);
       this.setPoints(this.points);
     }
   }
+
   undo = () => {
-    console.log("last",this.points[this.points.length - 1].length);
     if (this.points[this.points.length - 1].length>2){
       this.points[this.points.length - 1].pop();
     } else {
@@ -114,10 +116,9 @@ export default class RubberbandMultipolygon {
       }
     }
   }
+
   newPart = () => {
-    // console.log("NewPart triggered");
     this.points.push([]);
-    // console.log("points after newPart: ", this.points);
   }
  
   get element() {
@@ -130,8 +131,12 @@ export default class RubberbandMultipolygon {
     this.group = null;
   }
 
-  toSelection = () => {
-    return new Selection(toSVGTarget(this.group, this.env.image));
-  }
+  toSelection = () =>
+    new Selection({
+      ...toSVGTarget(this.group, this.env.image),
+      renderedVia: {
+        name: 'multipolygon'
+      }
+    });
 
 }

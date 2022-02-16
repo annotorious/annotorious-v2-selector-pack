@@ -2,13 +2,14 @@ import EditableShape from '@recogito/annotorious/src/tools/EditableShape';
 import { svgFragmentToShape, toSVGTarget } from '@recogito/annotorious/src/selectors/EmbeddedSVG';
 import { SVG_NAMESPACE } from '@recogito/annotorious/src/util/SVG';
 import { format, setFormatterElSize } from '@recogito/annotorious/src/util/Formatting';
+
 // TODO optional: mask to dim the outside area
 //import Mask from './MultipolygonMask';
 
 const getPoints = (shape) => {
   // Could just be Array.from(shape.querySelector('.inner').points) but...
   // IE11 :-(
-    const pointLists = getPointsFromPathValue(shape.querySelector('.a9s-inner').attributes.d.nodeValue)
+  const pointLists = getPointsFromPathValue(shape.querySelector('.a9s-inner').attributes.d.nodeValue)
   const pointArray = [];
   for (let pointList of pointLists) {
     let points = []
@@ -19,10 +20,9 @@ const getPoints = (shape) => {
       }
       points.push(p);
     }
-    pointArray.push(points)
-    // console.log("pointList",pointArray);
+    pointArray.push(points);
   }
-  // console.log("points are:", pointArray);
+
   return pointArray;
 }
 const getPointsFromPathValue = polygon => {
@@ -63,7 +63,7 @@ export const svgFragmentToPoints = annotation => {
 
 const drawEmbeddedSVG = annotation => {
   const shape = svgFragmentToShape(annotation);
-  // console.log("shape is",shape);
+
   // Hack
   svgFragmentToPoints(annotation);
 
@@ -79,7 +79,7 @@ const drawEmbeddedSVG = annotation => {
 
   g.appendChild(outer);
   g.appendChild(inner);
-  console.log("g",g);
+
   return g;
 }
 /**
@@ -89,7 +89,7 @@ export default class EditableMultipolygon extends EditableShape {
 
   constructor(annotation, g, config, env) {
     super(annotation, g, config, env);
-    console.log("editableMultipolygon initiated.");
+
     this.svg.addEventListener('mousemove', this.onMouseMove);
     this.svg.addEventListener('mouseup', this.onMouseUp);
 
@@ -167,9 +167,8 @@ export default class EditableMultipolygon extends EditableShape {
   setPoints = (points) => {
     const round = num =>
     Math.round(10 * num) / 10;
-    // const str = points.map(pt => `${pt.x},${pt.y}`).join();
+
     let str = ""
-    // console.log("incomming points",points);
     for (let pointList of points){
       str += "M"
       let first = true 
@@ -209,23 +208,21 @@ export default class EditableMultipolygon extends EditableShape {
 
   onMouseMove = evt => {
     if (this.grabbedElem) {
-      // console.log("grabbedElm", this.grabbedElem);
+
       const pos = this.getSVGPoint(evt);
-      // console.log("shape",this.shape);
+
       if (this.grabbedElem === this.shape) {
         const dx = pos.x - this.grabbedAt.x;
         const dy = pos.y - this.grabbedAt.y;
-        // console.log("this.grabbedAt.x",this.grabbedAt.x);
-        // console.log("this.grabbedAt.y",this.grabbedAt.y);
+
         let pointList = getPoints(this.shape)
-        // console.log("pointList",pointList);
+
         const updatedPoints = []
         for (let points of pointList){
           updatedPoints.push(points.map(pt =>
             ({ x: pt.x + dx, y: pt.y + dy })))
         } 
     
-        // console.log("updatedpoints",updatedPoints);
         this.grabbedAt = pos;
 
         this.setPoints(updatedPoints);
@@ -238,17 +235,20 @@ export default class EditableMultipolygon extends EditableShape {
             i+=1
         }
         
-        this.emit('update', toSVGTarget(this.shape, this.env.image));
+        this.emit('update', {
+          ...toSVGTarget(this.shape, this.env.image),
+          renderedVia: {
+            name: 'multipolygon'
+          }
+        });
       } else {
         let handleIdx = -1
         let pointListIDX = 0
         let found = false
-        // console.log("this.shape",this.shape);
+
         for (let handle of this.handles){
           if (handle.indexOf(this.grabbedElem)>0){
             handleIdx = handle.indexOf(this.grabbedElem);
-            // console.log("found grabbedElem", this.grabbedElem);
-            // console.log("in:", handle);
             found=true
           } else {
             if (!found){
@@ -256,36 +256,28 @@ export default class EditableMultipolygon extends EditableShape {
             }
           }
         }
-        // console.log("handleIdx",handleIdx);
-        // console.log("pointListIDX",pointListIDX);
-      let pointList = getPoints(this.shape)
-        // console.log("pointsList",pointList);
+  
+        let pointList = getPoints(this.shape)
+  
         const updatedPoints = []
         let updatedPointsIDX = 0
         for (let points of pointList){
           if (updatedPointsIDX === pointListIDX){
             let newPoints = []
             points.forEach(function (value, i) {
-              // console.log("i:",i,"handleIDx",handleIdx);
               if (i === handleIdx){
-                // console.log("found new pos");
                 newPoints.push(pos)
               } else {
                 newPoints.push(value)
               }
             });
             updatedPoints.push(newPoints)
-//            updatedPoints.push(points.map((pt, idx) =>
-//            (idx === handleIdx) ? pos : pt))  
           } else {
             updatedPoints.push(points)
           }
-          // console.log("updatedPoints after itteration:",updatedPoints);
           updatedPointsIDX +=1
         } 
-
-        // console.log("updatedpoints",updatedPoints);
-        
+       
         this.setPoints(updatedPoints);
         updatedPointsIDX = 0
         for (let handle of this.handles){
@@ -297,7 +289,12 @@ export default class EditableMultipolygon extends EditableShape {
 
         }
         
-        this.emit('update', toSVGTarget(this.shape, this.env.image));
+        this.emit('update', {
+          ...toSVGTarget(this.shape, this.env.image),
+          renderedVia: {
+            name: 'multipolygon'
+          }
+        });
       }
     }
   }

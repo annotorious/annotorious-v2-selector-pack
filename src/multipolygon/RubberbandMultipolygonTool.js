@@ -9,18 +9,19 @@ export default class RubberbandMultipolygonTool extends Tool {
 
   constructor(g, config, env) {
     super(g, config, env);
+
     this._isDrawing = false;
+    
     document.addEventListener('keydown', evt => {
-      console.log("keyDown Driggered",evt);
       if (evt.key == "z" && evt.ctrlKey) {
-        // console.log("doing undo");
         this.undo();
       }
+      
       if (evt.key == 'n') {
-        console.log("n recognized");
         this.newPart();
       }
-    });  }
+    });  
+  }
 
   startDrawing = (x, y) => {
     this._isDrawing = true;
@@ -45,26 +46,22 @@ export default class RubberbandMultipolygonTool extends Tool {
     }
   }
   undo = () =>{
-    // console.log("rubberband undo",this.rubberband);
     if (this.rubberband){
       this.rubberband.undo();
 
     }
-    //console.log(this);
   }
   newPart = () =>{
     if (this.rubberband){
       this.rubberband.newPart();
 
     }
-    //console.log(this);
   }
 
   onMouseMove = (x, y) =>
     this.rubberband.dragTo([ x, y ]);
 
   onMouseUp = (x, y, evt) => {
-    console.log("mouse up", evt);
     if (evt.altKey){
       this.onDblClick(evt);
     } else if (evt.ctrlKey) {

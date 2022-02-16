@@ -9,29 +9,31 @@ const ALL_TOOLS = new Set([
   'circle',
   'ellipse',
   'freehand',
-  'multipolygon'
+  // 'multipolygon' // exclude from defaults for now
 ]);
 
 const SelectorPack = (anno, config) => {
 
   // Add configured tools, or all
-  const useTools = config?.tools ? 
-    new Set(config.tools.map(t => t.toLowerCase())) : ALL_TOOLS;
+  const tools = config?.tools ? 
+    config.tools.map(t => t.toLowerCase()) : ALL_TOOLS;
 
-  if (useTools.has('point'))
-    anno.addDrawingTool(PointTool);
+  tools.forEach(tool => {
+    if (tool === 'point')
+      anno.addDrawingTool(PointTool);
 
-  if (useTools.has('circle'))
-    anno.addDrawingTool(RubberbandCircleTool);
+    if (tool === 'circle')
+      anno.addDrawingTool(RubberbandCircleTool);
 
-  if (useTools.has('ellipse'))
-    anno.addDrawingTool(RubberbandEllipseTool);
+    if (tool === 'ellipse')
+      anno.addDrawingTool(RubberbandEllipseTool);
   
-  if (useTools.has('freehand'))
-    anno.addDrawingTool(RubberbandFreehandTool);
+    if (tools === 'freehand')
+      anno.addDrawingTool(RubberbandFreehandTool);
 
-  if (useTools.has('multipolygon'))
-    anno.addDrawingTool(RubberbandMultipolygonTool);
+    if (tools === 'multipolygon')
+      anno.addDrawingTool(RubberbandMultipolygonTool);
+  });
 
 }
 

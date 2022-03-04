@@ -24,9 +24,13 @@
           allowEmpty: true
         });
 
-        Annotorious.SelectorPack(anno);
+        Annotorious.SelectorPack(anno, {
+          tools: ['circle', 'ellipse', 'rect', 'freehand', 'polygon']
+        });
 
         var tools = anno.listDrawingTools();
+        console.log(tools);
+
         var selected = 0;
 
         var toolToggle = document.getElementById('current-tool');

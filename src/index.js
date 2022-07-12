@@ -3,12 +3,14 @@ import RubberbandCircleTool from './circle/RubberbandCircleTool';
 import RubberbandEllipseTool from './ellipse/RubberbandEllipseTool';
 import RubberbandFreehandTool from './freehand/RubberbandFreehandTool';
 import RubberbandMultipolygonTool from './multipolygon/RubberbandMultipolygonTool';
+import RubberbandLineTool from './line/RubberbandLineTool';
 
 const ALL_TOOLS = new Set([
   'point',
   'circle',
   'ellipse',
   'freehand',
+  'line',
   // 'multipolygon' // exclude from defaults for now
 ]);
 
@@ -33,6 +35,9 @@ const SelectorPack = (anno, config) => {
 
     if (tool === 'multipolygon')
       anno.addDrawingTool(RubberbandMultipolygonTool);
+
+    if (tool === 'line')
+      anno.addDrawingTool(RubberbandLineTool);
   });
 
 }

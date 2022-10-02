@@ -62,46 +62,8 @@ npm i @recogito/annotorious-selector-pack
 ```
 
 ## Using with VueJS
-Install package at project root with npm
 
-```html
-<template>
-  <div>
-    <img id="plan" src="img.png" style="width: 100%; max-width: 1024px;" />
-  </div>
-</template>
-
-<script>
-  import { Annotorious} from '@recogito/annotorious';
-  import '@recogito/annotorious/dist/annotorious.min.css';
-  import  SelectorPack  from '@recogito/annotorious-selector-pack';
-
-  export default {
-
-    data() {
-      return {
-        anno: null
-      }
-    },
-
-    methods: {
-      initAnno() {
-        this.anno = new Annotorious({
-          image: document.getElementById("plan")
-        });
-      }
-    },
-
-    mounted() {
-      this.initAnno();
-      SelectorPack(this.anno)
-    }
-  }
-</script>
-```
-
-
-
+To use the plugin in VueJS, please follow [this guide](https://recogito.github.io/guides/annotorious-in-vue/).
 
 ## Development
 

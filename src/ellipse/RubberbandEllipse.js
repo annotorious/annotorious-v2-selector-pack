@@ -17,7 +17,7 @@ export default class RubberbandEllipse {
 
     this.group = document.createElementNS(SVG_NAMESPACE, 'g');
 
-    this.ellipse = drawEllipse(anchorX, anchorY, 2);
+    this.ellipse = drawEllipse(anchorX, anchorY, 2, 2);
     this.ellipse.setAttribute('class', 'a9s-selection');
 
     this.mask = new Mask(env.image, this.ellipse);

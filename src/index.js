@@ -2,32 +2,44 @@ import PointTool from './point/PointTool';
 import RubberbandCircleTool from './circle/RubberbandCircleTool';
 import RubberbandEllipseTool from './ellipse/RubberbandEllipseTool';
 import RubberbandFreehandTool from './freehand/RubberbandFreehandTool';
+import RubberbandMultipolygonTool from './multipolygon/RubberbandMultipolygonTool';
+import RubberbandLineTool from './line/RubberbandLineTool';
 
 const ALL_TOOLS = new Set([
   'point',
   'circle',
   'ellipse',
-  'freehand'
+  'freehand',
+  'line',
+  // 'multipolygon' // exclude from defaults for now
 ]);
 
 const SelectorPack = (anno, config) => {
 
   // Add configured tools, or all
-  const useTools = config?.tools ? 
-    new Set(config.tools.map(t => t.toLowerCase())) : ALL_TOOLS;
+  const tools = config?.tools ? 
+    config.tools.map(t => t.toLowerCase()) : ALL_TOOLS;
 
-  if (useTools.has('point'))
-    anno.addDrawingTool(PointTool);
+  tools.forEach(tool => {
+    if (tool === 'point')
+      anno.addDrawingTool(PointTool);
 
-  if (useTools.has('circle'))
-    anno.addDrawingTool(RubberbandCircleTool);
+    if (tool === 'circle')
+      anno.addDrawingTool(RubberbandCircleTool);
 
-  if (useTools.has('ellipse'))
-    anno.addDrawingTool(RubberbandEllipseTool);
+    if (tool === 'ellipse')
+      anno.addDrawingTool(RubberbandEllipseTool);
   
-  if (useTools.has('freehand'))
-    anno.addDrawingTool(RubberbandFreehandTool);
-  
+    if (tool === 'freehand')
+      anno.addDrawingTool(RubberbandFreehandTool);
+
+    if (tool === 'multipolygon')
+      anno.addDrawingTool(RubberbandMultipolygonTool);
+
+    if (tool === 'line')
+      anno.addDrawingTool(RubberbandLineTool);
+  });
+
 }
 
 export default SelectorPack;

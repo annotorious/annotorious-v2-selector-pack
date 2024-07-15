@@ -59,7 +59,7 @@ export default class EditablePoint extends EditableShape {
   }
 
   updateState = annotation => {
-    const { x, y } = parseRectFragment(annotation, env.image);
+    const { x, y } = parseRectFragment(annotation, this.env.image);
     this.setHandleXY(this.point, x, y);
   }
 

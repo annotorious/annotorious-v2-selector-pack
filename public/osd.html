@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Annotorious OpenSeadragon Example</title>
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.5.9/dist/annotorious.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.5.16/dist/annotorious.min.css" rel="stylesheet">
     <style>
       html, body {
         margin:0;
@@ -44,6 +44,10 @@
         fill:rgba(0,0,0,0.6) !important;
         pointer-events:none;
       }
+
+      .column .a9s-annotation.a9s-point .a9s-outer {
+        fill:#fff;
+      }
     </style>
     <script>
       window.onload = function() {
@@ -64,12 +68,13 @@
         
         var anno = OpenSeadragon.Annotorious(viewer, {
           locale: 'auto',
-          allowEmpty: true
+          allowEmpty: true,
+          gigapixelMode: true
         });
 
         Annotorious.SelectorPack(anno);
 
-        anno.setDrawingTool('circle');
+        anno.setDrawingTool('line');
       }
     </script>
   </head>
@@ -79,7 +84,7 @@
       <div id="openseadragon" style="width: 640px; height: 480px;"></div>
     </div>      
     <script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4.2/build/openseadragon/openseadragon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.5.9/dist/openseadragon-annotorious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.5.16/dist/openseadragon-annotorious.min.js"></script>
     <script src="annotorious-selector-pack.js"></script>
   </body>
 </html>

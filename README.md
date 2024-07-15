@@ -2,14 +2,11 @@
 
 Additional selection tools for Annotorious and the Annotorious OpenSeadragon plugin.
 
+- Point
 - Circle
 - Ellipse
 - Freehand
-
-## Compatibility
-
-__Please use Selector Pack v0.3.2 for Annotorious versions 2.5.8 and lower. An updated release, compatible with
-Annotorious 2.5.9+ is under development.__
+- Multi-polygon
 
 ## Using
 
@@ -38,7 +35,7 @@ Include the plugin in your page directl from the CDN:
         // Init the plugin
         Annotorious.SelectorPack(anno);
 
-        // [ 'rect', 'polygon', 'circle', 'ellipse', 'freehand' ]
+        // [ 'rect', 'polygon', 'point', 'circle', 'ellipse', 'freehand' ]
         console.log(anno.listDrawingTools());
 
         anno.setDrawingTool('ellipse');
@@ -54,10 +51,19 @@ You can set the tools to include when initializing the plugin.
 
 ```js
 // Will only include ellipse and freehand, but not circle
-Annotorious.SelectorPack(anno, { 
+Annotorious.SelectorPack(anno, {
   tools: ['ellipse', 'freehand']
 });
 ```
+## Installation  with npm
+```
+npm i @recogito/annotorious-selector-pack
+
+```
+
+## Using with VueJS
+
+To use the plugin in VueJS, please follow [this guide](https://recogito.github.io/guides/annotorious-in-vue/).
 
 ## Development
 
